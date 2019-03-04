@@ -1,0 +1,21 @@
+version: '3.5'
+services:
+  python:
+    build:
+      context: ..
+      dockerfile: ./docker/python/Dockerfile
+  nginx:
+    build:
+      context: ..
+      dockerfile: ./docker/nginx/Dockerfile
+      args:
+        app_env: development
+    ports:
+      - '80:80'
+  mysql:
+    build:
+      context: ..
+      dockerfile: ./docker/mysql/Dockerfile
+    ports:
+      - '3306:3306'
+

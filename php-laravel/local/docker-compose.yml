@@ -1,0 +1,49 @@
+version: '3.5'
+services:
+  mysql:
+    image: mysql:5.7.22
+    ports:
+      - 3306:3306
+    environment:
+      - MYSQL_ALLOW_EMPTY_PASSWORD=yes
+      - MYSQL_DATABASE=itsumo_biz
+      - TZ=`ls -la /etc/localtime | cut -d/ -f8-9`
+    volumes:
+      - data:/var/lib/mysql
+  redis:
+    image: redis:4.0.9-alpine
+    ports:
+      - 6379:6379    
+  php-fpm:
+    build:
+      context: ../..
+      dockerfile: ./docker/local/php-fpm/Dockerfile
+    ports:
+      - '9000:9000'
+    environment:
+      - TZ=`ls -la /etc/localtime | cut -d/ -f8-9`
+    volumes:
+      - ../..:/var/www/html
+      - /var/www/html/node_modules
+      - /var/www/html/vendor
+      - sock:/var/run/php-fpm
+  nginx:
+    build:
+      context: ../..
+      dockerfile: ./docker/local/nginx/Dockerfile
+    ports:
+      - '80:80'
+    environment:
+      - TZ=`ls -la /etc/localtime | cut -d/ -f8-9`
+    volumes:
+      - ../..:/var/www/html
+      - ../../storage/logs/nginx:/var/log/nginx
+      - sock:/var/run/php-fpm
+    depends_on:
+      - php-fpm
+volumes:
+  data:
+    driver: local
+  sock:
+    driver: local
+

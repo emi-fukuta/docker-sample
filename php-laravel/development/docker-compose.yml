@@ -1,0 +1,15 @@
+version: '3.5'
+services:
+  php-fpm:
+    build:
+      context: ../..
+      dockerfile: ./docker/development/php-fpm/Dockerfile
+    ports:
+      - '9000:9000'
+  nginx:
+    build:
+      context: ../..
+      dockerfile: ./docker/development/nginx/Dockerfile
+    ports:
+      - '80:80'
+

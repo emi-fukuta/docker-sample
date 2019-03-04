@@ -1,0 +1,22 @@
+version: '3.0'
+services:
+  nginx:
+    build:
+      context: ..
+      dockerfile: ./docker/nginx/Dockerfile
+    ports:
+      - '80:80'
+    volumes:
+      - ..:/var/www/app
+    depends_on:
+      - rails
+  rails:
+    build:
+      context: ..
+      dockerfile: ./docker/rails/Dockerfile
+    command: bundle exec pumactl start
+    ports:
+      - '3000:3000'
+    volumes:
+      - ..:/var/www/app
+

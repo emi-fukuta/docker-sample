@@ -1,0 +1,21 @@
+[uwsgi]
+uid = root
+gid = root
+
+chdir  = /var/www/app/web_backend
+wsgi-file = /var/www/app/web_backend/config/wsgi.py
+module = config.wsgi:application
+
+master  = true
+vacuum  = true
+pidfile = /var/run/uwsgi/uwsgi.pid
+socket  = /var/run/uwsgi/uwsgi.sock
+
+processes = 16
+max-requests = 6000
+
+req-logger = file:/var/log/python/request.log
+logger = file:/var/log/python/error.log
+
+touch-reload = /tmp/uwsgi-reload.trigger
+
